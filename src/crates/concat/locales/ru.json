@@ -946,6 +946,7 @@
   "tray.hideMeters": "Скрыть индикаторы уровня",
   "tray.linkage": "Связь",
   "tray.magneticTimelineDeletingTrimming": "Магнитный таймлайн",
+  "tray.multiSelect": "Multi-select",
   "tray.panTool": "Инструмент «Рука» ({0})",
   "tray.playerFollowsResizePlayhead": "Плеер следует за подрезкой",
   "tray.previewAxisOptions": "Параметры оси предпросмотра",

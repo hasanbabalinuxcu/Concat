@@ -946,6 +946,7 @@
   "tray.hideMeters": "隐藏电平表",
   "tray.linkage": "联动",
   "tray.magneticTimelineDeletingTrimming": "磁性时间线",
+  "tray.multiSelect": "Multi-select",
   "tray.panTool": "平移工具 ({0})",
   "tray.playerFollowsResizePlayhead": "播放器跟随修剪",
   "tray.previewAxisOptions": "预览坐标轴选项",
