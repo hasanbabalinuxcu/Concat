@@ -9,7 +9,14 @@ impl Studio {
 
     /// A press resolves the selection before anything moves, so a drag that
     /// starts on an already-selected clip carries the whole set.
-    pub fn clip_pressed(&mut self, id: &str, additive: bool, edge: i32) {
+    ///
+    /// `multi` is the tray's or the phone's multi-select mode, kept apart
+    /// from `additive` (the pointer's modifiers): in the mode, an edge
+    /// press is a trim of that clip with the set left as it was, and a tap
+    /// on a transition's seam resizes without taking the set away — where
+    /// a Shift press on the seam still selects the transition alone, as
+    /// it always has.
+    pub fn clip_pressed(&mut self, id: &str, additive: bool, edge: i32, multi: bool) {
         let Some(clip) = self.clip(id).cloned() else {
             return;
         };
@@ -23,11 +30,15 @@ impl Studio {
         self.end_audition();
         // A press on a transition's seam or handles selects the transition,
         // not the clip it rides into; a drag there still sets its length.
+        // In the mode the set is what the finger is gathering: a seam
+        // press still resizes, but clears nothing and selects nothing new.
         if edge == 2
             && let Some(transition) = clip.transition_in.as_ref()
         {
-            self.selection.clear();
-            self.transition_selected = Some(id.to_owned());
+            if !multi {
+                self.selection.clear();
+                self.transition_selected = Some(id.to_owned());
+            }
             self.begin_echo();
             self.gesture = Gesture::TransitionResize {
                 clip: id.to_owned(),
@@ -36,27 +47,33 @@ impl Studio {
             return;
         }
         self.transition_selected = None;
-        let already = self.selection.iter().any(|held| held == id);
-        self.selection = if additive {
-            if already {
-                self.selection
-                    .iter()
-                    .filter(|held| held.as_str() != id)
-                    .cloned()
-                    .collect()
+        // On an edge in the mode, the press is a trim of that clip: the
+        // set is not toggled — a handle is not a thing to gather.
+        if !(multi && edge >= 0) {
+            let already = self.selection.iter().any(|held| held == id);
+            self.selection = if additive {
+                if already {
+                    self.selection
+                        .iter()
+                        .filter(|held| held.as_str() != id)
+                        .cloned()
+                        .collect()
+                } else {
+                    let mut next = self.selection.clone();
+                    next.push(id.to_owned());
+                    next
+                }
+            } else if already {
+                self.selection.clone()
             } else {
-                let mut next = self.selection.clone();
-                next.push(id.to_owned());
-                next
-            }
-        } else if already {
-            self.selection.clone()
-        } else {
-            vec![id.to_owned()]
-        };
+                vec![id.to_owned()]
+            };
+        }
 
         self.begin_echo();
-        if edge >= 0 && self.selection.len() <= 1 {
+        // In the mode an edge press trims whatever the set holds; a set of
+        // two or more turned a Shift edge press into a move, and still does.
+        if edge >= 0 && (multi || self.selection.len() <= 1) {
             self.gesture = Gesture::Trim {
                 clip: id.to_owned(),
                 edge: if edge == 0 { Edge::Start } else { Edge::End },

@@ -1206,7 +1206,8 @@ fn start(project: Option<std::path::PathBuf>, smoke: bool) -> Result<(), slint::
                                       additive: bool,
                                       edge: i32| {
         let additive = additive || state.lanes.multi_select;
-        state.clip_pressed(id.as_str(), additive, edge);
+        let multi = state.lanes.multi_select;
+        state.clip_pressed(id.as_str(), additive, edge, multi);
     }));
     editor.on_clip_split(on_lanes!(|state, id: SharedString, seconds: f32| {
         state.split_clip_at(&id, seconds);
@@ -1662,6 +1663,10 @@ fn start(project: Option<std::path::PathBuf>, smoke: bool) -> Result<(), slint::
 
     // ── the stage ──
     editor.on_stage_pressed(on_window!(|state, x: f32, y: f32, additive: bool| {
+        // As on a clip press: the mode is the touch world's Shift, and a
+        // press on the stage floor must not take a gathered set away
+        // while it is on.
+        let additive = additive || state.lanes.multi_select;
         state.stage_pressed(x, y, additive);
     }));
     editor.on_stage_grip_pressed(on_window!(
