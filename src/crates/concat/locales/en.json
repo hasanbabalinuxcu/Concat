@@ -946,6 +946,7 @@
   "tray.hideMeters": "Hide the level meters",
   "tray.linkage": "Linkage",
   "tray.magneticTimelineDeletingTrimming": "Magnetic timeline",
+  "tray.multiSelect": "Multi-select",
   "tray.panTool": "Pan tool ({0})",
   "tray.playerFollowsResizePlayhead": "Player follows the resize",
   "tray.previewAxisOptions": "Preview axis options",
