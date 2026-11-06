@@ -406,6 +406,7 @@ export component Seat inherits Rectangle {
             magnetic: Editor.magnetic;
             linkage: Editor.linkage;
             pan-mode: Editor.pan-mode;
+            multi-select: Editor.multi-select;
             trim-follow: Editor.trim-follow;
             meters-shown: Editor.meters-shown;
             preview-axis: Editor.preview-axis;
@@ -439,6 +440,7 @@ export component Seat inherits Rectangle {
             magnetic-changed(on) => { Editor.magnetic-changed(on); }
             linkage-changed(on) => { Editor.linkage-changed(on); }
             pan-changed(on) => { Editor.pan-changed(on); }
+            multi-select-changed(on) => { Editor.multi-select-changed(on); }
             trim-follow-changed(on) => { Editor.trim-follow-changed(on); }
             meters-shown-changed(on) => { Editor.meters-shown-changed(on); }
             preview-axis-changed(on) => { Editor.preview-axis-changed(on); }

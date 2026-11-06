@@ -158,6 +158,8 @@ export component TimelineTray inherits Rectangle {
     in property <bool> magnetic: false;
     in property <bool> linkage: true;
     in property <bool> pan-mode: false;
+    /// Multi-select: on, a tap adds a clip to the selection.
+    in property <bool> multi-select: false;
     /// Trim follow: the playhead rides a clip edge while it is dragged.
     in property <bool> trim-follow: false;
     /// The preview axis: the monitor follows the pointer across the lanes.
@@ -193,6 +195,7 @@ export component TimelineTray inherits Rectangle {
     callback magnetic-changed(on: bool);
     callback linkage-changed(on: bool);
     callback pan-changed(on: bool);
+    callback multi-select-changed(on: bool);
     callback trim-follow-changed(on: bool);
     callback preview-axis-changed(on: bool);
     /// The chevron beside the preview axis: open its menu under the button
@@ -296,6 +299,16 @@ export component TimelineTray inherits Rectangle {
                 : " (" + Editor.keys-delete-right + ")");
             icon-size: 16px;
             clicked => { Editor.shortcut("delete-right"); }
+        }
+        // Multi-select: on, a tap adds a clip to the selection instead of
+        // taking it — the touch world's Shift — so a set can be gathered
+        // for Merge or Delete.
+        TrayButton {
+            glyph: Glyph.check;
+            label: I18n.t("tray.multiSelect");
+            icon-size: 16px;
+            checked: root.multi-select;
+            clicked => { root.multi-select-changed(!root.multi-select); }
         }
         TrayButton {
             glyph: Glyph.merge;

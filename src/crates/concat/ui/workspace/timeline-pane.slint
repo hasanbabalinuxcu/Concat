@@ -41,6 +41,7 @@ export component TimelinePane inherits Rectangle {
     in property <bool> magnetic: false;
     in property <bool> linkage: true;
     in property <bool> pan-mode: false;
+    in property <bool> multi-select: false;
     in property <bool> trim-follow: false;
     in property <bool> preview-axis: false;
     in property <bool> preview-axis-audio;
@@ -65,6 +66,7 @@ export component TimelinePane inherits Rectangle {
     callback magnetic-changed(on: bool);
     callback linkage-changed(on: bool);
     callback pan-changed(on: bool);
+    callback multi-select-changed(on: bool);
     callback trim-follow-changed(on: bool);
     callback preview-axis-changed(on: bool);
     callback preview-axis-audio-changed(on: bool);
@@ -330,6 +332,7 @@ export component TimelinePane inherits Rectangle {
             magnetic: root.magnetic;
             linkage: root.linkage;
             pan-mode: root.pan-mode;
+            multi-select: root.multi-select;
             trim-follow: root.trim-follow;
             preview-axis: root.preview-axis;
             selected-count: root.selected-count;
@@ -351,6 +354,7 @@ export component TimelinePane inherits Rectangle {
             magnetic-changed(on) => { root.magnetic-changed(on); }
             linkage-changed(on) => { root.linkage-changed(on); }
             pan-changed(on) => { root.pan-changed(on); }
+            multi-select-changed(on) => { root.multi-select-changed(on); }
             trim-follow-changed(on) => { root.trim-follow-changed(on); }
             preview-axis-changed(on) => { root.preview-axis-changed(on); }
             meters-shown-changed(on) => { root.meters-shown-changed(on); }
