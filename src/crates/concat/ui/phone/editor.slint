@@ -979,6 +979,14 @@ export component PhoneEditor inherits Rectangle {
                 current: root.sheet == "transitions";
                 clicked => { root.show("transitions", false); }
             }
+            // Gather clips one tap at a time: the touch world's Shift,
+            // for a set to merge or delete.
+            ToolItem {
+                glyph: Glyph.check;
+                label: I18n.t("tray.multiSelect");
+                current: Editor.multi-select;
+                clicked => { Editor.multi-select-changed(!Editor.multi-select); }
+            }
             ToolItem {
                 glyph: Glyph.waveform;
                 label: I18n.t("phone.captions");
@@ -1044,6 +1052,14 @@ export component PhoneEditor inherits Rectangle {
                 glyph: Glyph.trash;
                 label: I18n.t("common.delete");
                 clicked => { Editor.delete-selected(); }
+            }
+            // And here, where a selection is already holding: the toggle
+            // must never be out of reach while it is on.
+            ToolItem {
+                glyph: Glyph.check;
+                label: I18n.t("tray.multiSelect");
+                current: Editor.multi-select;
+                clicked => { Editor.multi-select-changed(!Editor.multi-select); }
             }
             // The figure itself: its size, fill, outline and shadow.
             if root.is-shape: ToolItem {
