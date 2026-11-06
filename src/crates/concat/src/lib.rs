@@ -1107,6 +1107,9 @@ fn start(project: Option<std::path::PathBuf>, smoke: bool) -> Result<(), slint::
     editor.on_pan_changed(on_window!(|state, on: bool| {
         state.handle(Msg::Timeline(TimelineMsg::PanChanged(on)));
     }));
+    editor.on_multi_select_changed(on_window!(|state, on: bool| {
+        state.handle(Msg::Timeline(TimelineMsg::MultiSelectChanged(on)));
+    }));
     editor.on_snap_changed(on_window!(|state, snap: bool| {
         state.handle(Msg::Timeline(TimelineMsg::SnapChanged(snap)));
     }));
@@ -1202,6 +1205,7 @@ fn start(project: Option<std::path::PathBuf>, smoke: bool) -> Result<(), slint::
                                       id: SharedString,
                                       additive: bool,
                                       edge: i32| {
+        let additive = additive || state.lanes.multi_select;
         state.clip_pressed(id.as_str(), additive, edge);
     }));
     editor.on_clip_split(on_lanes!(|state, id: SharedString, seconds: f32| {
@@ -1252,6 +1256,7 @@ fn start(project: Option<std::path::PathBuf>, smoke: bool) -> Result<(), slint::
             // title's text box, and it ends here, with the band it drew -
             // usually an empty one that clears the selection.
             state.flush_commit();
+            let additive = additive || state.lanes.multi_select;
             let (from_row, to_row) = (state.row_at(from_y), state.row_at(to_y));
             let caught: Vec<String> = state
                 .timeline()

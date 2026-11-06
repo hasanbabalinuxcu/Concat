@@ -51,6 +51,9 @@ impl Default for LaneView {
 pub enum TimelineMsg {
     ToolChanged(TimelineTool),
     PanChanged(bool),
+    /// The tray's or the phone's multi-select button: taps add to the
+    /// selection instead of replacing it — the touch world's Shift.
+    MultiSelectChanged(bool),
     SnapChanged(bool),
     /// The menu's Snap row: the other way round.
     SnapToggled,
@@ -101,6 +104,9 @@ pub struct TimelinePane {
     pub snap: bool,
     /// Hand tool: wheel and drag pan time instead of scrolling the stack.
     pub pan_mode: bool,
+    /// Multi-select mode: a press adds a clip to the selection rather than
+    /// taking it, so a set can be gathered for Merge or Delete.
+    pub multi_select: bool,
     pub lane_view: HashMap<String, LaneView>,
     /// The lanes' width on screen, in logical pixels; zero until Slint has
     /// said, and then every clip is published.
@@ -123,6 +129,7 @@ impl Default for TimelinePane {
             tool: TimelineTool::Select,
             snap: true,
             pan_mode: false,
+            multi_select: false,
             lane_view: HashMap::new(),
             width: 0.0,
             centred: false,
@@ -137,6 +144,7 @@ impl TimelinePane {
         match msg {
             TimelineMsg::ToolChanged(tool) => self.tool = tool,
             TimelineMsg::PanChanged(on) => self.pan_mode = on,
+            TimelineMsg::MultiSelectChanged(on) => self.multi_select = on,
             TimelineMsg::SnapChanged(on) => self.snap = on,
             TimelineMsg::SnapToggled => self.snap = !self.snap,
             TimelineMsg::MagneticChanged(on) => {

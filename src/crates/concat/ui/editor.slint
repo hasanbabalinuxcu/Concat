@@ -348,6 +348,9 @@ export global Editor {
     in-out property <bool> linkage: true;
     /// Hand tool: wheel and drag pan time instead of scrolling the stack.
     in-out property <bool> pan-mode: false;
+    /// Multi-select: taps add to the selection instead of replacing it —
+    /// the touch world's Shift, for gathering a set to merge or delete.
+    in-out property <bool> multi-select: false;
     /// Trim follow: the playhead rides a clip edge while it is dragged. A
     /// remembered preference, which Rust owns.
     in-out property <bool> trim-follow;
@@ -399,6 +402,7 @@ export global Editor {
     callback magnetic-changed(on: bool);
     callback linkage-changed(on: bool);
     callback pan-changed(on: bool);
+    callback multi-select-changed(on: bool);
     callback trim-follow-changed(on: bool);
     callback meters-shown-changed(on: bool);
     callback preview-axis-changed(on: bool);
